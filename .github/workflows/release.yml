@@ -1,0 +1,48 @@
+name: Publish v0.1.1
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/release.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify tested JAR
+        run: echo 'fdbdee193e461183f887f5eb85bbe74d66aab3e064407ccea4f8e7bafd81fdd0  releases/volumetriclight-1.20.1-0.1.1.jar' | sha256sum --check
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
+          Minecraft Java 1.20.1 · Forge 47.4.28+（47.x）· Java 17
+
+          ### 主要功能
+          - 可自定义光源位置、照射位置、出光口大小、张角、射程、颜色和亮度的圆锥体积光。
+          - 中文编辑界面，支持当前世界实时预览、参数滑条和坐标拾取。
+          - 指定玩家追踪、任意或指定玩家的区域触发，以及命令方块控制。
+          - 灯光配置和区域随世界保存。
+
+          ### 0.1.1 修复
+          - 修复框选区域时，一次按住左键就同时记录两个相同角点的问题。
+          - 现在每次独立的左键按下只选取一个角点；中途取消会恢复原来的区域。
+
+          ### 安装
+          下载下方的 `volumetriclight-1.20.1-0.1.1.jar` 放入 `mods` 文件夹；升级时移除旧版 JAR。多人游戏两端都需安装。
+          管理员按 **L** 或输入 `/vlight edit` 打开编辑器。
+
+          已通过构建、逻辑自检和客户端输入回归。未实测独立多人服务器及其他光影模组组合。
+          首版同屏最多绘制 8 盏灯，方块遮挡为低分辨率近似计算。
+
+          [完整操作说明](https://github.com/Yido404/VolumetricLight/blob/main/README.md) · [验证记录](https://github.com/Yido404/VolumetricLight/blob/main/VALIDATION.md)
+          NOTES
+          gh release create v0.1.1 releases/volumetriclight-1.20.1-0.1.1.jar \
+            --target "$GITHUB_SHA" \
+            --title 'Volumetric Light 0.1.1 · Forge 1.20.1' \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            --latest
