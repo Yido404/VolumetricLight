@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+[[mods]]
+modId="volumetriclight"
+version="0.1.1"
+displayName="Volumetric Light / 体积光"
+description='''Editable conical volumetric spotlights, player tracking, region triggers and command block control.'''
+[[dependencies.volumetriclight]]
+modId="forge"
+mandatory=true
+versionRange="[47.4.28,48)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.volumetriclight]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.20.2)"
+ordering="NONE"
+side="BOTH"
